@@ -15,5 +15,16 @@ export default defineConfig({
         },
       },
     ],
-  })]
+  })],
+  css: {
+    modules: {
+      localsConvention: 'dashesOnly'
+    },
+    preprocessorOptions: {
+      less: {
+        // 支持内联 JavaScript
+        javascriptEnabled: true
+      }
+    }
+  }
 })
