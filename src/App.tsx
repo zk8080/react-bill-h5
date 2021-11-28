@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import routes from './router';
+import routes from '@/router';
 import { ConfigProvider, } from 'zarm';
 import './App.css';
 
