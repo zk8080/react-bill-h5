@@ -1,11 +1,11 @@
 import React from 'react';
 
-function About() {
+function User() {
   return (
     <div>
-      关于
+      用户
     </div>
   );
 }
 
-export default About;
+export default User;

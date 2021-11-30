@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import routes from '@/router';
 import { ConfigProvider, } from 'zarm';
 import './App.css';
+import Nav from './components/Nav';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           }
         </Routes>
       </ConfigProvider>
+      <Nav showNav={true}/>
     </BrowserRouter>
   )
 }
