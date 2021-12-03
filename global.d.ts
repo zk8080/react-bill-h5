@@ -6,7 +6,7 @@ declare module 'axios' {
     code: number;
     msg?: string;
     message?: string;
-    data?: T;
+    data: T;
     [keys: string]: any;
   }
 
