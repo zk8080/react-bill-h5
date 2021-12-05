@@ -33,3 +33,18 @@ declare module 'axios' {
     ): Promise<CustomSuccessData<T>>;
   }
 }
+
+export interface BillItemType {
+  bills: BillType[];
+  date:  number;
+}
+
+export interface BillType {
+  amount:    string;
+  date:      string;
+  id:        number;
+  pay_type:  number;
+  remark:    string;
+  type_id:   number;
+  type_name: string;
+}

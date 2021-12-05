@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "dayjs": "^1.10.7",
     "lib-flexible": "^0.3.2",
     "react": "^17.0.0",
     "react-captcha-code": "^1.0.7",

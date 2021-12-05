@@ -643,6 +643,11 @@ csstype@^3.0.2:
   resolved "https://registry.npmmirror.com/csstype/download/csstype-3.0.10.tgz?cache=0&sync_timestamp=1637224514674&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fcsstype%2Fdownload%2Fcsstype-3.0.10.tgz"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
+dayjs@^1.10.7:
+  version "1.10.7"
+  resolved "https://registry.nlark.com/dayjs/download/dayjs-1.10.7.tgz?cache=0&sync_timestamp=1631266519235&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdayjs%2Fdownload%2Fdayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
+  integrity sha1-LPX5Gt0oEWdIRAhmoKHSbzps5Gg=
+
 debug@^3.2.6:
   version "3.2.7"
   resolved "https://registry.npmmirror.com/debug/download/debug-3.2.7.tgz"
