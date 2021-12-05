@@ -7,20 +7,27 @@ import { http } from '@/utils/axios';
 import { REFRESH_STATE, LOAD_STATE } from '@/utils' // Pull 组件需要的一些常量
 import dayjs from 'dayjs';
 
+interface BillListResType {
+  list: BillItemType[],
+  totalExpense: number,
+  totalIncome: number,
+  totalPage: number,
+}
+
 
 function Index() {
 
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
-  const [page, setPage] = useState(1); // 分页
+  const [page, setPage] = useState<number>(1); // 分页
   const [list, setList] = useState<BillItemType[]>([]); // 账单列表
-  const [totalPage, setTotalPage] = useState(0); // 分页总数
-  const [refreshing, setRefreshing] = useState(REFRESH_STATE.normal); // 下拉刷新状态
-  const [loading, setLoading] = useState(LOAD_STATE.normal); // 上拉加载状态
+  const [totalPage, setTotalPage] = useState<number>(0); // 分页总数
+  const [refreshing, setRefreshing] = useState<number>(REFRESH_STATE.normal); // 下拉刷新状态
+  const [loading, setLoading] = useState<number>(LOAD_STATE.normal); // 上拉加载状态
 
 
   // 获取账单方法
   const getBillList = async () => {
-    const { data } = await http.get(`/bill/list?page=${page}&page_size=5&date=${currentTime}`);
+    const { data } = await http.get<BillListResType>(`/bill/list?page=${page}&page_size=5&date=${currentTime}`);
     // 下拉刷新，重制数据
     if (page == 1) {
       setList(data.list);
