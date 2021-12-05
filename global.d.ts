@@ -34,17 +34,26 @@ declare module 'axios' {
   }
 }
 
+// 账单类型
 export interface BillItemType {
   bills: BillType[];
-  date:  number;
+  date: number;
 }
 
 export interface BillType {
-  amount:    string;
-  date:      string;
-  id:        number;
-  pay_type:  number;
-  remark:    string;
-  type_id:   number;
+  amount: string;
+  date: string;
+  id: number;
+  pay_type: number;
+  remark: string;
+  type_id: number;
   type_name: string;
+}
+
+// 筛选类型TS
+export interface FilterType {
+  id: string;
+  name?: string;
+  type?: string;
+  user_id?: number;
 }
