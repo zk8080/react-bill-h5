@@ -5,12 +5,15 @@ import style from './style.module.less';
 import Captcha from "react-captcha-code";
 import { http } from '@/utils/axios';
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginData {
   token: string
 }
 
 const Login = () => {
+  const navigate = useNavigate();
+
   // 账号
   const [username, setUsername] = useState<string | undefined>();
   // 密码
@@ -77,6 +80,7 @@ const Login = () => {
         // 将 token 写入 localStorage
         localStorage.setItem('token', res.data.token);
         Toast.show("登录成功");
+        navigate('/');
       }
       
     } catch (e) {
