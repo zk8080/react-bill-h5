@@ -11,26 +11,26 @@ declare module 'axios' {
   }
 
   export interface AxiosInstance {
-    <T = any>(config: AxiosRequestConfig): Promise<CustomSuccessData<T>>;
-    request<T = any>(config: AxiosRequestConfig): Promise<CustomSuccessData<T>>;
-    get<T = any>(url: string, config?: AxiosRequestConfig): Promise<CustomSuccessData<T>>;
-    delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<CustomSuccessData<T>>;
-    head<T = any>(url: string, config?: AxiosRequestConfig): Promise<CustomSuccessData<T>>;
-    post<T = any>(
+    // <T = any>(config: AxiosRequestConfig): Promise<CustomSuccessData<T>>;
+    request<T = any, R = CustomSuccessData<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
+    get<T = any, R = CustomSuccessData<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    delete<T = any, R = CustomSuccessData<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    head<T = any, R = CustomSuccessData<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    post<T = any, R = CustomSuccessData<T>, D = any>(
       url: string,
-      data?: any,
-      config?: AxiosRequestConfig,
-    ): Promise<CustomSuccessData<T>>;
-    put<T = any>(
+      data?: D,
+      config?: AxiosRequestConfig<D>,
+    ): Promise<R>;
+    put<T = any, R = CustomSuccessData<T>, D = any>(
       url: string,
-      data?: any,
-      config?: AxiosRequestConfig,
-    ): Promise<CustomSuccessData<T>>;
-    patch<T = any>(
+      data?: D,
+      config?: AxiosRequestConfig<D>,
+    ): Promise<R>;
+    patch<T = any, R = CustomSuccessData<T>, D = any>(
       url: string,
-      data?: any,
-      config?: AxiosRequestConfig,
-    ): Promise<CustomSuccessData<T>>;
+      data?: D,
+      config?: AxiosRequestConfig<D>,
+    ): Promise<R>;
   }
 }
 
