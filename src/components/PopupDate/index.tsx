@@ -1,12 +1,12 @@
 import { forwardRef, useState } from 'react';
 import style from './style.module.less';
 import { Popup, DatePicker  } from 'zarm';
+import type { PopupProps } from 'zarm/types/popup/Popup';
 import dayjs from 'dayjs';
 
-type IProps = {
+type IProps = PopupProps & {
   onSelect: (date: string) => void;
-  mode?: string;
-  visible: boolean;
+  mode?: 'month' | 'date';
   onClose?: () => void;
 }
 
@@ -16,10 +16,10 @@ const PopupDate = (props: IProps) => {
 
   const choseMonth = (item: Date) => {
     setNow(item)
-    if (mode == 'month') {
+    if (mode === 'month') {
       onSelect(dayjs(item).format('YYYY-MM'))
-    } else if (mode == 'date') {
-      onSelect(dayjs(item).format('YYYY-MM-DD'))
+    } else if (mode === 'date') {
+      onSelect(dayjs(item).format('MM-DD'))
     }
     onClose?.();
   }

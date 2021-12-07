@@ -8,6 +8,7 @@ import { REFRESH_STATE, LOAD_STATE } from '@/utils' // Pull 组件需要的一�
 import dayjs from 'dayjs';
 import PopupType, { TypeRefObj } from '@/components/PopupType';
 import CustomIcon from '@/components/CustomIcon';
+import PopupAddBill from '@/components/PopupAddBill';
 import PopupDate from '@/components/PopupDate';
 
 interface BillListResType {
@@ -31,8 +32,14 @@ function Index() {
   const [loading, setLoading] = useState<number>(LOAD_STATE.normal); // 上拉加载状态
   const [currentSelect, setCurrentSelect] = useState<FilterType>({ id: 'all', name: '全部类型' }); // 当前筛选类型
   const [dateVisible, setDateVisible] = useState<boolean>(false); // 日期选择窗
-  const [totalExpense, setTotalExpense] = useState(0); // 总支出
-  const [totalIncome, setTotalIncome] = useState(0); // 总收入
+  const [totalExpense, setTotalExpense] = useState<number>(0); // 总支出
+  const [totalIncome, setTotalIncome] = useState<number>(0); // 总收入
+  const [addVisible, setAddVisible] = useState<boolean>(false);
+
+  // 切换添加弹窗
+  const toggleAdd = useCallback(() => {
+    setAddVisible(!addVisible);
+  }, [addVisible])
 
   // 切换日期弹窗
   const toggleDate = useCallback(() => {
@@ -155,7 +162,7 @@ function Index() {
       }
 
     </div>
-    <div className={style.add}><CustomIcon type='tianjia'/></div>
+    <div className={style.add} onClick={toggleAdd}><CustomIcon type='tianjia'/></div>
     <PopupType
       ref={typeRef}
       onSelect={handleSelectType}
@@ -165,6 +172,10 @@ function Index() {
       onSelect={selectMonth}
       onClose={toggleDate}
       mode="month"
+    />
+    <PopupAddBill
+      visible={addVisible}
+      onMaskClick={toggleAdd}
     />
   </div>
 }
