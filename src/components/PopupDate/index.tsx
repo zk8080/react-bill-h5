@@ -7,11 +7,10 @@ import dayjs from 'dayjs';
 type IProps = PopupProps & {
   onSelect: (date: string) => void;
   mode?: 'month' | 'date';
-  onClose?: () => void;
 }
 
 const PopupDate = (props: IProps) => {
-  const { onSelect, mode = 'date', visible, onClose } = props;
+  const { onSelect, mode = 'date', visible, onMaskClick } = props;
   const [now, setNow] = useState(new Date())
 
   const choseMonth = (item: Date) => {
@@ -21,13 +20,13 @@ const PopupDate = (props: IProps) => {
     } else if (mode === 'date') {
       onSelect(dayjs(item).format('MM-DD'))
     }
-    onClose?.();
+    onMaskClick?.();
   }
 
   return <Popup
     visible={visible}
     direction="bottom"
-    onMaskClick={onClose}
+    onMaskClick={onMaskClick}
     destroy={false}
     mountContainer={() => document.body}
   >
@@ -37,7 +36,7 @@ const PopupDate = (props: IProps) => {
         value={now}
         mode={mode}
         onOk={choseMonth}
-        onCancel={onClose}
+        onCancel={onMaskClick}
       />
     </div>
   </Popup>

@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useState, useImperativeHandle } from 'react'
 import { Popup, Icon } from 'zarm'
 import classNames from 'classnames'
 import { http } from '@/utils/axios';
-import { FilterType } from '../../../global';
+import type { FilterType } from '../../../global';
 
 import style from './style.module.less';
 

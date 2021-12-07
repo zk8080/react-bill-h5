@@ -170,7 +170,7 @@ function Index() {
     <PopupDate
       visible={dateVisible}
       onSelect={selectMonth}
-      onClose={toggleDate}
+      onMaskClick={toggleDate}
       mode="month"
     />
     <PopupAddBill

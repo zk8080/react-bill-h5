@@ -62,7 +62,7 @@ const PopupAddBill = (props: IProps) => {
       mode="date"
       visible={dateVisible}
       onSelect={handleDateChange}
-      onClose={toggleDate}
+      onMaskClick={toggleDate}
     />
   </Popup>
 }
