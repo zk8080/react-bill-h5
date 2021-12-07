@@ -7,6 +7,7 @@ import { http } from '@/utils/axios';
 import { REFRESH_STATE, LOAD_STATE } from '@/utils' // Pull 组件需要的一些常量
 import dayjs from 'dayjs';
 import PopupType, { TypeRefObj } from '@/components/PopupType';
+import CustomIcon from '@/components/CustomIcon';
 import PopupDate from '@/components/PopupDate';
 
 interface BillListResType {
@@ -124,7 +125,7 @@ function Index() {
             className={style.time}
             onClick={toggleDate}
           >
-            {dayjs().format('YYYY-MM')}
+            {currentTime}
             <Icon className={style.arrow} type="arrow-bottom" />
           </span>
         </div>
@@ -154,6 +155,7 @@ function Index() {
       }
 
     </div>
+    <div className={style.add}><CustomIcon type='tianjia'/></div>
     <PopupType
       ref={typeRef}
       onSelect={handleSelectType}

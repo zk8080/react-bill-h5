@@ -11,9 +11,17 @@ const httpGen = (obj: AxiosRequestConfig) => {
   // 默认参数
   service.defaults.withCredentials = true
   service.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-  service.defaults.headers.common['Authorization'] = `${localStorage.getItem('token') || null}`
+  // service.defaults.headers.common['Authorization'] = `${localStorage.getItem('token') || null}`
   service.defaults.headers.post['Content-Type'] = 'application/json'
 
+  service.interceptors.request.use((request: AxiosRequestConfig<any>) => {
+    // 解决localStorage首次登录还没有token时的情况
+    request.headers = {
+      ...request.headers,
+      Authorization: `${localStorage.getItem('token') || null}`
+    }
+    return request;
+  })
 
   service.interceptors.response.use((response: AxiosResponse<CustomSuccessData<any>>) => {
     if (typeof response.data !== 'object') {
