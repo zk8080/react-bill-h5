@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import style from './style.module.less';
 import { Popup, DatePicker  } from 'zarm';
-import type { PopupProps } from 'zarm/types/popup/Popup';
+import type { PopupProps } from 'zarm/lib/popup/Popup';
 import dayjs from 'dayjs';
 
 type IProps = PopupProps & {

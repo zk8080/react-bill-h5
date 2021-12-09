@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Icon, Keyboard, Popup } from 'zarm';
-import type { PopupProps } from 'zarm/types/popup/Popup';
+import type { PopupProps } from 'zarm/lib/popup/Popup';
 import classNames from 'classnames';
 import style from './style.module.less';
 import PopupDate from '../PopupDate';
