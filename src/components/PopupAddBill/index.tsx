@@ -5,6 +5,10 @@ import classNames from 'classnames';
 import style from './style.module.less';
 import PopupDate from '../PopupDate';
 import dayjs from 'dayjs';
+import { http } from '@/utils/axios';
+import { FilterType } from 'global';
+import CustomIcon from '../CustomIcon';
+import { TypeKey, typeMap } from '@/utils';
 
 type IProps = PopupProps & {
 
@@ -18,7 +22,10 @@ const PopupAddBill = (props: IProps) => {
   const [payType, setPayType] = useState<PayType>('expense'); // 支出或收入类型
   const [addDate, setAddDate] = useState<string>(dayjs().format('MM-DD')); // 新增日期
   const [dateVisible, setDateVisible] = useState<boolean>(false); // 日期弹窗
-  const [amount, setAmount] = useState<string>('');
+  const [amount, setAmount] = useState<string>(''); // 金额
+  const [currentType, setCurrentType] = useState<FilterType | undefined>(); // 当前选中账单类型
+  const [expense, setExpense] = useState<FilterType[]>([]); // 支出类型数组
+  const [income, setIncome] = useState<FilterType[]>([]); // 收入类型数组
 
   // 选择类型
   const changeType = (type: PayType) => {
@@ -59,6 +66,19 @@ const PopupAddBill = (props: IProps) => {
     setAmount(amount + value)
   }
 
+  useEffect(() => {
+    const getTypeList = async () => {
+      const { data: { list } } = await http.get<{list: FilterType[]}>('/type/list');
+      const _expense = list.filter(i => i.type === '1'); // 支出类型
+      const _income = list.filter(i => i.type === '2'); // 收入类型
+      setExpense(_expense);
+      setIncome(_income);
+      setCurrentType(_expense[0]); // 新建账单，类型默认是支出类型数组的第一项
+    }
+
+    getTypeList();
+  }, [])
+
   return <Popup
     visible={visible}
     direction="bottom"
@@ -86,6 +106,20 @@ const PopupAddBill = (props: IProps) => {
         <span className={style.sufix}>¥</span>
         <span className={classNames(style.amount, style.animation)}>{amount}</span>
       </div>
+      <div className={style.typeWarp}>
+      <div className={style.typeBody}>
+        {/* 通过 payType 判断，是展示收入账单类型，还是支出账单类型 */}
+        {
+          (payType == 'expense' ? expense : income).map(item => <div onClick={() => setCurrentType(item)} key={item.id} className={style.typeItem}>
+            {/* 收入和支出的字体颜色，以及背景颜色通过 payType 区分，并且设置高亮 */}
+            <span className={classNames({[style.iconfontWrap]: true, [style.expense]: payType == 'expense', [style.income]: payType == 'income', [style.active]: currentType?.id == item.id})}>                
+              <CustomIcon className={style.iconfont} type={typeMap[Number(item.id) as TypeKey].icon} />
+            </span>
+            <span>{item.name}</span>
+          </div>)
+        }
+      </div>
+    </div>
       <Keyboard type="price" onKeyClick={handleMoney} />
     </div>
     <PopupDate
