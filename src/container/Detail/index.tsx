@@ -1,9 +1,12 @@
 import React from 'react';
+import Header from '@/components/Header';
 
 function Detail() {
   return (
     <div>
-      详情
+      <Header 
+        title="账单详情"
+      />
     </div>
   );
 }
