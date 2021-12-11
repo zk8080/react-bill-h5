@@ -18,7 +18,7 @@ const PopupDate = (props: IProps) => {
     if (mode === 'month') {
       onSelect(dayjs(item).format('YYYY-MM'))
     } else if (mode === 'date') {
-      onSelect(dayjs(item).format('MM-DD'))
+      onSelect(dayjs(item).format('YYYY-MM-DD'))
     }
     onMaskClick?.();
   }

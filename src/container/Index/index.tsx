@@ -176,6 +176,7 @@ function Index() {
     <PopupAddBill
       visible={addVisible}
       onMaskClick={toggleAdd}
+      refreshLoad={refreshData}
     />
   </div>
 }
