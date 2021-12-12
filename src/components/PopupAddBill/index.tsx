@@ -10,17 +10,32 @@ import { FilterType } from 'global';
 import CustomIcon from '../CustomIcon';
 import { TypeKey, typeMap } from '@/utils';
 
+export interface DetailInfoType {
+  id: number;
+  pay_type: number;
+  amount: string;
+  date: string;
+  type_id: number;
+  type_name: string;
+  user_id: number;
+  remark: string;
+}
+
 type IProps = PopupProps & {
   /**
    * 刷新数据回调
    */
   refreshLoad?: () => void;
+  /**
+   * 订单详情
+  */
+  detailInfo?: DetailInfoType;
 }
 
 type PayType = 'expense' | 'income'
 
 const PopupAddBill = (props: IProps) => {
-  const { visible, onMaskClick, refreshLoad } = props;
+  const { visible, onMaskClick, refreshLoad, detailInfo } = props;
 
   const [payType, setPayType] = useState<PayType>('expense'); // 支出或收入类型
   const [addDate, setAddDate] = useState<string>(dayjs().format('YYYY-MM-DD')); // 新增日期
@@ -35,9 +50,9 @@ const PopupAddBill = (props: IProps) => {
   // 选择类型
   const changeType = (type: PayType) => {
     setPayType(type);
-    if(type === 'expense') {
+    if (type === 'expense') {
       setCurrentType(expense[0]);
-    }else {
+    } else {
       setCurrentType(income[0]);
     }
   }
@@ -59,30 +74,42 @@ const PopupAddBill = (props: IProps) => {
         Toast.show('请输入具体金额');
         return
       }
-      if(!currentType) {
+      if (!currentType) {
         return Toast.show('请选择账单种类！');
       }
       const params = {
         amount: Number(amount).toFixed(2), // 账单金额小数点后保留两位
         type_id: currentType.id, // 账单种类id
         type_name: currentType.name, // 账单种类名称
-        date: dayjs(addDate).unix() * 1000, // 日期传时间戳
+        date: dayjs(addDate).valueOf(), // 日期传时间戳
         pay_type: payType == 'expense' ? 1 : 2, // 账单类型传 1 或 2
-        remark: remark || '' // 备注
+        remark: remark || '', // 备注
+        id: detailInfo?.id
       }
-      const res = await http.post('/bill/add', params);
-      if(res.code === 200) {
-        Toast.show('添加成功！');
-        onMaskClick?.();
-        refreshLoad?.();
-        // 重制数据
-      setAmount('');
-      setPayType('expense');
-      setCurrentType(expense[0]);
-      setAddDate(dayjs().format('YYYY-MM-DD'));
-      setRemark('');
+
+      if(detailInfo?.id) {
+        // 更新数据
+        // 如果有 id 需要调用详情更新接口
+        const res = await http.post('/bill/update', params);
+        if(res.code === 200) {
+          Toast.show('修改成功');
+        }
+      } else {
+        const res = await http.post('/bill/add', params);
+        if (res.code === 200) {
+          Toast.show('添加成功！');
+          // 重制数据
+          setAmount('');
+          setPayType('expense');
+          setCurrentType(expense[0]);
+          setAddDate(dayjs().format('YYYY-MM-DD'));
+          setRemark('');
+        }
       }
-    } catch(e) {
+      onMaskClick?.();
+      refreshLoad?.();
+      
+    } catch (e) {
       console.log(e);
     }
   }
@@ -128,6 +155,20 @@ const PopupAddBill = (props: IProps) => {
 
     getTypeList();
   }, [])
+
+  useEffect(() => {
+    if (detailInfo?.id) {
+      const { type_id, pay_type, type_name, remark: detailRemark, amount: detailAmount, date } = detailInfo;
+      setPayType(pay_type == 1 ? 'expense' : 'income')
+      setCurrentType({
+        id: type_id.toString(),
+        name: type_name
+      })
+      setRemark(detailRemark)
+      setAmount(detailAmount)
+      setAddDate(dayjs(Number(date)).format('YYYY-MM-DD'))
+    }
+  }, [detailInfo?.id])
 
   return <Popup
     visible={visible}
