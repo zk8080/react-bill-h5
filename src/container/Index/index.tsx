@@ -48,26 +48,34 @@ function Index() {
 
   // 获取账单方法
   const getBillList = async () => {
-    const { data } = await http.get<BillListResType>(`/bill/list`, {
-      params: {
-        page,
-        page_size: 5,
-        date: currentTime,
-        type_id: currentSelect.id || 'all'
+    try {
+      if(page === 1) {
+        // 加载第一页时，默认为下拉刷新操作
+        setRefreshing(REFRESH_STATE.loading);
       }
-    });
-    // 下拉刷新，重制数据
-    if (page == 1) {
-      setList(data.list);
-    } else {
-      setList(list.concat(data.list));
+      const { data } = await http.get<BillListResType>(`/bill/list`, {
+        params: {
+          page,
+          page_size: 5,
+          date: currentTime,
+          type_id: currentSelect.id || 'all'
+        }
+      });
+      // 下拉刷新，重制数据
+      if (page == 1) {
+        setList(data.list);
+      } else {
+        setList(list.concat(data.list));
+      }
+      setTotalExpense(parseFloat(data.totalExpense.toFixed(2)));
+      setTotalIncome(parseFloat(data.totalIncome.toFixed(2)));
+      setTotalPage(data.totalPage);
+      // 上滑加载状态
+      setLoading(LOAD_STATE.success);
+      setRefreshing(REFRESH_STATE.success);
+    } catch (e) {
+      console.log(e);
     }
-    setTotalExpense(parseFloat(data.totalExpense.toFixed(2)));
-    setTotalIncome(parseFloat(data.totalIncome.toFixed(2)));
-    setTotalPage(data.totalPage);
-    // 上滑加载状态
-    setLoading(LOAD_STATE.success);
-    setRefreshing(REFRESH_STATE.success);
   }
 
   // 请求列表数据
@@ -94,7 +102,6 @@ function Index() {
 
   // 选中类型
   const handleSelectType = (item: FilterType) => {
-    setRefreshing(REFRESH_STATE.loading);
     // 触发刷新列表，将分页重制为 1
     setPage(1);
     setCurrentSelect(item);
@@ -102,7 +109,6 @@ function Index() {
 
   // 筛选月份
   const selectMonth = (item: string) => {
-    setRefreshing(REFRESH_STATE.loading);
     setPage(1);
     setCurrentTime(item)
   }
@@ -110,6 +116,8 @@ function Index() {
   useEffect(() => {
     getBillList();
   }, [page, currentSelect.id, currentTime])
+
+  console.log(refreshing, '-refreshing--');
 
   return <div className={style.home}>
     <div className={style.header}>
