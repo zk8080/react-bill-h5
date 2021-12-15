@@ -57,3 +57,6 @@ export interface FilterType {
   type?: string;
   user_id?: number;
 }
+
+// 类型标识
+export type PayType = 'expense' | 'income';

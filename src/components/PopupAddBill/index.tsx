@@ -6,7 +6,7 @@ import style from './style.module.less';
 import PopupDate from '../PopupDate';
 import dayjs from 'dayjs';
 import { http } from '@/utils/axios';
-import { FilterType } from 'global';
+import { FilterType, PayType } from 'global';
 import CustomIcon from '../CustomIcon';
 import { TypeKey, typeMap } from '@/utils';
 
@@ -32,7 +32,7 @@ type IProps = PopupProps & {
   detailInfo?: DetailInfoType;
 }
 
-type PayType = 'expense' | 'income'
+
 
 const PopupAddBill = (props: IProps) => {
   const { visible, onMaskClick, refreshLoad, detailInfo } = props;
