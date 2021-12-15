@@ -8,6 +8,35 @@ import PopupDate from '@/components/PopupDate'
 import style from './style.module.less';
 import { typeMap, TypeKey } from '@/utils';
 import type { PayType } from '../../../global';
+import * as echarts from 'echarts/core';
+import {
+  TitleComponent,
+  TitleComponentOption,
+  TooltipComponent,
+  TooltipComponentOption,
+  LegendComponent,
+  LegendComponentOption
+} from 'echarts/components';
+import { PieChart, PieSeriesOption } from 'echarts/charts';
+import { LabelLayout } from 'echarts/features';
+import { CanvasRenderer } from 'echarts/renderers';
+import { EChartsType } from 'echarts/types/dist/shared';
+
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  PieChart,
+  CanvasRenderer,
+  LabelLayout
+]);
+
+type EChartsOption = echarts.ComposeOption<
+  | TitleComponentOption
+  | TooltipComponentOption
+  | LegendComponentOption
+  | PieSeriesOption
+>;
 
 interface DataItem {
   number: number;
@@ -30,6 +59,11 @@ const Data = () => {
   const [expenseData, setExpenseData] = useState<DataItem[]>([]); // 支出数据
   const [incomeData, setIncomeData] = useState<DataItem[]>([]); // 收入数据
   const [visible, setVisible] = useState<boolean>(false); // 日期弹窗
+  const [pieType, setPieType] = useState<PayType>('expense'); // 饼图的「收入」和「支出」控制
+
+  // echarts实例
+  const pipChartRef = useRef<EChartsType>();
+  // 切换日期弹窗
   const toggleVisible = useCallback(() => {
     setVisible(!visible);
   }, [visible])
@@ -39,9 +73,57 @@ const Data = () => {
     setCurDate(date);
   }
 
-  // 切换类型
+  // 切换收支类型
   const changeTotalType = (type: PayType) => {
     setTotalType(type);
+  }
+
+  // 绘制饼图方法
+  const setPieChart = (data: DataItem[]) => {
+    const echartDom = document.getElementById('proportion');
+    if (echartDom) {
+      // 初始化饼图，返回实例。
+      pipChartRef.current = echarts.init(echartDom);
+      // 饼图配置参数
+      const option: EChartsOption = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        // 图例
+        legend: {
+          data: data.map(item => item.type_name)
+        },
+        series: [
+          {
+            name: '支出',
+            type: 'pie',
+            radius: '55%',
+            data: data.map(item => {
+              return {
+                value: item.number,
+                name: item.type_name
+              }
+            }),
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      pipChartRef.current?.setOption(option);
+    };
+  };
+
+  // 切换饼图收支类型
+  const changePieType = (type: PayType) => {
+    setPieType(type);
+    // 重绘饼图
+    setPieChart(type == 'expense' ? expenseData : incomeData);
   }
 
   // 获取数据详情
@@ -57,15 +139,21 @@ const Data = () => {
     const income_data = data.total_data.filter(item => item.pay_type == 2).sort((a, b) => b.number - a.number); // 过滤出账单类型为收入的项
     setExpenseData(expense_data);
     setIncomeData(income_data);
+    // 绘制饼图
+    setPieChart(pieType == 'expense' ? expense_data : income_data);
   };
 
   useEffect(() => {
     getData();
+    return  () => {
+      // 组件卸载释放饼图实例
+      pipChartRef.current?.dispose();
+    }
   }, [curDate])
 
   return <div className={style.data}>
     <div className={style.total}>
-      <div 
+      <div
         className={style.time}
         onClick={toggleVisible}
       >
@@ -94,9 +182,9 @@ const Data = () => {
                     type={item.type_id ? typeMap[item.type_id as TypeKey].icon : '1'}
                   />
                 </span>
-                <span className={style.name}>{ item.type_name }</span>
+                <span className={style.name}>{item.type_name}</span>
               </div>
-              <div className={style.progress}>¥{ Number(item.number).toFixed(2) || 0 }</div>
+              <div className={style.progress}>¥{Number(item.number).toFixed(2) || 0}</div>
             </div>
             <div className={style.right}>
               <div className={style.percent}>
@@ -109,6 +197,19 @@ const Data = () => {
             </div>
           </div>)
         }
+      </div>
+    </div>
+    <div className={style.structure}>
+      <div className={style.proportion}>
+        <div className={style.head}>
+          <span className={style.title}>收支构成</span>
+          <div className={style.tab}>
+            <span onClick={() => changePieType('expense')} className={classNames({ [style.expense]: true, [style.active]: pieType == 'expense' })}>支出</span>
+            <span onClick={() => changePieType('income')} className={classNames({ [style.income]: true, [style.active]: pieType == 'income' })}>收入</span>
+          </div>
+        </div>
+        {/* 这是用于放置饼图的 DOM 节点 */}
+        <div id="proportion"></div>
       </div>
     </div>
     <PopupDate
