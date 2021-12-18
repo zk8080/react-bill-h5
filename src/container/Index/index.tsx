@@ -117,8 +117,6 @@ function Index() {
     getBillList();
   }, [page, currentSelect.id, currentTime])
 
-  console.log(refreshing, '-refreshing--');
-
   return <div className={style.home}>
     <div className={style.header}>
       <div className={style.dataWrap}>

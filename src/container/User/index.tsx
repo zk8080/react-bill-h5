@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { http } from '@/utils/axios';
-import { Cell } from 'zarm';
+import { Button, Cell } from 'zarm';
 import style from './style.module.less';
 import CustomIcon from '@/components/CustomIcon';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,12 @@ const User = () => {
       console.log(e);
     }
   };
+
+  // 退出登录
+  const handleLogout = async () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  }
 
   useEffect(() => {
     getUserInfo();
@@ -59,6 +65,7 @@ const User = () => {
         icon={<img style={{ width: 20, verticalAlign: '-7px' }} src="//s.yezgea02.com/1615975178434/lianxi.png" alt="" />}
       />
     </div>
+    <Button className={style.logout} block theme="danger" onClick={handleLogout}>退出登录</Button>
   </div>
 }
 

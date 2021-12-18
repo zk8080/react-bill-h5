@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TabBar } from 'zarm';
 import style from './style.module.less';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -20,6 +20,10 @@ function Nav(props: Iprops) {
     setActiveKey(path  as string);
     navigate(path as string);
   }
+
+  useEffect(() => {
+    setActiveKey(location.pathname)
+  }, [location.pathname])
 
   return (
     <TabBar visible={showNav} className={style.tab} activeKey={activeKey} onChange={changeTab}>
