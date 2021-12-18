@@ -4,13 +4,7 @@ import { Cell } from 'zarm';
 import style from './style.module.less';
 import CustomIcon from '@/components/CustomIcon';
 import { useNavigate } from 'react-router-dom';
-
-interface UserInfoType {
-  id:        number;
-  username:  string;
-  signature: string;
-  avatar:    string;
-}
+import { UserInfoType } from '../../../global.d';
 
 const User = () => {
   const navigate = useNavigate();

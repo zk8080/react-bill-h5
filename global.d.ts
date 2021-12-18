@@ -60,3 +60,11 @@ export interface FilterType {
 
 // 类型标识
 export type PayType = 'expense' | 'income';
+
+// 用户信息
+export interface UserInfoType {
+  id:        number;
+  username:  string;
+  signature: string;
+  avatar:    string;
+}
