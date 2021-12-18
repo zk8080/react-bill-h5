@@ -7,6 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  overflow: hidden;
+}
+
 body, html, p {
   height: 100%;
   margin: 0;
