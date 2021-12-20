@@ -23,6 +23,7 @@ body, html, p {
 
 #root {
   height: 100%;
+  overflow-y: auto;
 }
 
 .text-deep {
