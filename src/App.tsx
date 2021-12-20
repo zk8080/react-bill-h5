@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import routes from '@/router';
-import { ConfigProvider } from 'zarm';
+import { ConfigProvider, Loading } from 'zarm';
 import './App.css';
 import Nav from './components/Nav';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 
 const needNav = ['/', '/data', '/user'] // 需要底部导航栏的路径
 
@@ -21,16 +21,26 @@ function App() {
     <>
       <ConfigProvider primaryColor={'#007fff'}>
         <Routes>
+
           {
             routes.map(item => {
               return (
-                <Route key={item.path} element={<item.component />} path={item.path} />
+                <Route
+                  key={item.path}
+                  element={
+                    <Suspense fallback={<Loading visible={true}/>}>
+                      <item.component />
+                    </Suspense>
+
+                  }
+                  path={item.path}
+                />
               )
             })
           }
         </Routes>
       </ConfigProvider>
-      <Nav showNav={showNav}/>
+      <Nav showNav={showNav} />
     </>
   )
 }
